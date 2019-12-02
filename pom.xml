@@ -92,11 +92,6 @@
         </plugin>
 
         <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>2.5</version>
-        </plugin>
-
-        <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>2.3.2</version>
         </plugin>
@@ -140,11 +135,18 @@
           <artifactId>maven-surefire-report-plugin</artifactId>
           <version>2.11</version>
         </plugin>
+		
+		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+        <configuration>
+            <forkCount>0</forkCount>
+            <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+		</plugin>
 
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.11</version>
-        </plugin>
+
 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
