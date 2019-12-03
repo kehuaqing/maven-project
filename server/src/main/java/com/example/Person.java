@@ -17,7 +17,7 @@ public class Person {
    * @param someone是人名
    * @return 字符串
    */
-  public final String person(final tring someone) {
+  public final String person(final String someone) {
     return String.format("Hello, %s!", someone);
   }
 }
