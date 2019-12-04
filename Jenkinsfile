@@ -12,7 +12,7 @@ pipeline {
             post {
                 success {
                     echo '开始存档....'
-                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/*.war'
+                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/webapp.war'
                 }
             }
         }
