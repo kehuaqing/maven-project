@@ -1,48 +1,46 @@
 pipeline {
     agent any
+
     tools{
         maven 'local maven'
     }
 
-    stages{
+    parameters{
+        string(name: 'tomcat_dev', defaultValue: '52.82.65.152', description: 'Staging Server')
+        string(name: 'tomcat_prod', defaultValue: '52.82.46.246', description: 'Production Server')
+    }
+
+    triggers {
+         pollSCM('* * * * *')
+     }
+
+     stages{
         stage('Build'){
             steps {
                 bat 'mvn clean package'
             }
             post {
                 success {
-                    echo '开始存档....'
-                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/webapp.war'
-                }
-            }
-        }
-        stage('Deploy to staging'){
-            steps{
-                build job:'deploy-to-staging'
-            }
-        }
-
-         stage ('Deploy to Production'){
-            steps{
-                timeout(time:5, unit:'DAYS'){
-                    input message:'是否部署到生产环境?' 
-                }
-
-                build job: 'deploy-to-production'
-            }
-            post {
-                success {
-                    echo '代码成功部署到生产环境'
-                }
-
-                failure {
-                    echo ' 部署失败'
+                    echo '开始存档...'
+                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war'
                 }
             }
         }
 
+     stage ('Deployments'){
+            parallel{
+                stage ('Deploy to Staging'){
+                    steps {
+                        bat "scp -i G:/tomcat-demo.pem C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat8/webapps"
+                    }
+                }
 
-
-
+                stage ("Deploy to Production"){
+                    steps {
+                        bat "scp -i G:/tomcat-demo.pem  C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat8/webapps"
+                    }
+                }
+            }
+        }
     }
 }
