@@ -22,7 +22,7 @@ pipeline {
             post {
                 success {
                     echo '开始存档...'
-                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war'
+                    archiveArtifacts artifacts: 'C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/webapp.war'
                 }
             }
         }
@@ -31,13 +31,13 @@ pipeline {
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "scp -i G:/tomcat-demo.pem C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat8/webapps"
+                        bat "scp -i G:/tomcat-demo.pem C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/webapp.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat8/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        bat "scp -i G:/tomcat-demo.pem  C:/Program Files (x86)/Jenkins/workspace/FullyAutomated/webapp/target/webapp.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat8/webapps"
+                        bat "scp -i G:/tomcat-demo.pem  C:/Program Files (x86)/Jenkins/workspace/package/webapp/target/webapp.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat8/webapps"
                     }
                 }
             }
